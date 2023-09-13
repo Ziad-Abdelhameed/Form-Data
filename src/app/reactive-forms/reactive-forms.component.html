@@ -1,0 +1,166 @@
+<div class="container">
+  <form [formGroup]="regisiterForm" class="mt-5 form row">
+    <div class="form-group">
+      <label for="username"> username: </label>
+      <input
+        type="text"
+        id="username"
+        formControlName="username"
+        class="form-control"
+        [class.is-invalid]="username?.touched && username?.invalid"
+      />
+      <!-- <div *ngIf="username?.invalid && username?.touched"></div> -->
+      <div *ngIf="username?.touched">
+        <small class="text-danger" *ngIf="username?.errors?.['required']"
+          >Name is required</small
+        >
+        <small class="text-danger" *ngIf="username?.errors?.['minlength']"
+          >Name must be 5 or more charcters</small
+        >
+        <small class="text-danger" *ngIf=" username?.errors?.['forbiddenName']"
+          >admin word is not allowed</small
+        >
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="email">Email: </label>
+      <input
+        type="email"
+        id="email"
+        formControlName="email"
+        class="form-control"
+        [class.is-invalid]="email?.errors?.['required']"
+      />
+    </div>
+
+    <div *ngIf="email?.errors?.['required'] ">
+      <small class="text-danger" *ngIf="email?.untouched"
+        >Email is required in this case</small
+      >
+      <small class="text-danger" *ngIf="email?.touched"
+        >Please Enter your Email</small
+      >
+    </div>
+
+    <div
+      formArrayName="alterEmails"
+      *ngFor="let item of alterEmails.controls; let i = index"
+    >
+      <div class="form-group">
+        <label for="email">Email {{ i + 1 }}: </label>
+        <input
+          type="email"
+          id="email"
+          [formControlName]="i"
+          class="form-control"
+          [class.is-invalid]="alterEmails.controls[i]?.errors?.['required']"
+        />
+
+        <div *ngIf="alterEmails.controls[i]?.errors?.['required']">
+          <small class="text-danger" *ngIf="alterEmails.controls[i]?.untouched"
+            >Email is required in this case</small
+          >
+          <small class="text-danger" *ngIf="alterEmails.controls[i]?.touched"
+            >Please Enter your Email</small
+          >
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <button class="btn btn-primary" (click)="addAnotherEmail()">
+        Add Email
+      </button>
+    </div>
+    <div class="form-check">
+      <input
+        type="checkbox"
+        id="check"
+        formControlName="isRequired"
+        class="form-check-input"
+        (click)="addEmailValidator()"
+      />
+      <label for="check" class="form-check-label"
+        >Send Data to this email</label
+      >
+    </div>
+    <!-- 
+
+     -->
+    <div class="form-group">
+      <label for="password">password: </label>
+      <input
+        type="password"
+        id="password"
+        formControlName="password"
+        class="form-control"
+        [class.is-invalid]="password?.errors?.['required'] && username?.valid"
+      />
+      <div>
+        <small
+          class="text-danger"
+          *ngIf="password?.errors?.['required'] && username?.valid"
+          >password is required</small
+        >
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="confirmPassword">confirmPassword: </label>
+      <input
+        type="password"
+        id="confirmPassword"
+        formControlName="confirmPassword"
+        class="form-control"
+        [class.is-invalid]="password?.valid && confirmPassword?.errors?.['required'] ||password?.valid && confirmPassword?.valid &&confirmPassword?.errors?.['misMatch']"
+      />
+      <div *ngIf="password?.valid">
+        <small
+          class="text-danger"
+          *ngIf="confirmPassword?.errors?.['required']"
+        >
+          confirm password is required</small
+        >
+        <!--  -->
+        <small
+          class="text-danger"
+          *ngIf="!confirmPassword?.errors?.['required'] && regisiterForm.errors?.['misMatch']"
+          >MisMatch confirm password</small
+        >
+      </div>
+    </div>
+    <!-- 
+
+     -->
+    <div formGroupName="address" class="form-group row">
+      <div class="form-group col">
+        <label for="country">country: </label>
+        <input
+          type="text"
+          id="country"
+          class="form-control"
+          formControlName="country"
+          class="form-control"
+        />
+      </div>
+
+      <div class="form-group col">
+        <label for="city">city: </label>
+        <input
+          type="text"
+          id="city"
+          class="form-control"
+          formControlName="city"
+          class="form-control"
+        />
+      </div>
+    </div>
+    <button
+      type="submit"
+      *ngIf="regisiterForm?.valid"
+      (click)="sendData()"
+      class="form-control btn btn-success col-sm-auto"
+    >
+      Send Data
+    </button>
+  </form>
+</div>
